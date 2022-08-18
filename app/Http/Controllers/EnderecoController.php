@@ -39,7 +39,28 @@ class EnderecoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            if($request->cep == null || $request->endereco == null || $request->numero == null){
+                return redirect()->back()->with('erro', 'Campos CEP, endereço e número, são obrigatórios.');
+            }
+
+            $endereco = new Endereco();
+            $endereco->cep = preg_replace('/[^0-9]/', '', $request->cep);
+            $endereco->cidade = $request->cidade;
+            $endereco->uf = $request->uf;
+            $endereco->numero = $request->numero;
+            $endereco->bairro = $request->bairro;
+            $endereco->complemento = $request->complemento;
+            $endereco->ponto_referencia = $request->ponto_referencia;
+            $endereco->id_user = auth()->user()->id;
+            $endereco->cadastradoPorUsuario = auth()->user()->id;
+            $endereco->ativo = 1;
+
+            dd($endereco);
+
+        } catch (\Exception $ex) {
+            return $ex->getMessage();
+        }
     }
 
     /**

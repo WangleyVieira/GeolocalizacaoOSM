@@ -1,10 +1,10 @@
 @extends('layout.main')
 
 @section('content')
-{{--
-<meta name="csrf-token" content="{{ csrf_token() }}">
+
+{{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 <script src="http://maps.google.com/maps/api/js?key=AIzaSyAUgxBPrGkKz6xNwW6Z1rJh26AqR8ct37A"></script>
-<script src="{{ asset('js/gmaps.js') }}"></script> --}}
+<script src="{{ asset('js/gmaps.js') }}"></script>
 
 <script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
 <link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
@@ -12,6 +12,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" /> --}}
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
+
+
 <style>
     .error{
         color:red
@@ -31,7 +35,7 @@
 @include('errors.alerts')
 @include('errors.errors')
 
-<header class="container" style="padding: 3rem; background-color:white">
+<header class="container" style="padding: 2rem; background-color:white">
     <h2 class="text-center">
         <div>
             <span><i class="fas fa-address-book"></i></span>
@@ -42,7 +46,7 @@
 
 <div class="container" style="padding: 3rem; background-color:white">
 
-    <form action="" id="form" method="POST">
+    <form action="{{ route('endereco.store') }}" id="form" method="POST">
         @csrf
         @method('POST')
 
@@ -58,33 +62,6 @@
                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion2">
                     <div class="card-body">
                         <div class="row">
-                            {{-- <div class="col-md-12">
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label for="uf">UF</label>
-                                        <select name="uf" id="uf" class="form-control form-control-lg select2" required>
-                                                <option value="" selected disabled>Selecione o estado</option>
-                                            @foreach ($estados as $estado)
-                                                <option value="{{ $estado->id }}">{{ $estado->sigla }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="id_municipio">Município</label>
-                                            <select name="id_municipio" id="id_municipio" class="form-control form-control-lg select2" required>
-                                                <option value="" selected disabled>Selecione o município</option>
-                                            </select>
-                                    </div>
-                                    <div class="form-group col-md-12">
-                                        <label class="form-label">Senha (mínimo 6 caracteres)</label>
-                                        <input class="form-control form-control-lg" type="password" name="password" placeholder="Informe uma senha">
-                                    </div>
-                                    <div class="form-group col-md-12">
-                                        <label class="form-label">Confirme a senha (mínimo 6 caracteres)</label>
-                                        <input class="form-control form-control-lg" type="password" name="confirmacao" placeholder="Confirme a senha">
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group col-md-4">
@@ -96,6 +73,14 @@
                                         <input type="text" name="endereco" id="endereco" class="form-control form-control-lg" placeholder="Informe o endereço">
                                     </div>
                                     <div class="form-group col-md-4">
+                                        <label for="cidade">Cidade</label>
+                                        <input type="text" name="cidade" id="cidade" class="form-control form-control-lg" placeholder="Informe a cidade">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="uf">UF</label>
+                                        <input type="text" name="uf" id="uf" class="form-control form-control-lg" placeholder="Informe a UF">
+                                    </div>
+                                    <div class="form-group col-md-4">
                                         <label for="numero">Número</label>
                                         <input type="text" name="numero" id="numero" class="form-control form-control-lg" placeholder="Informe o número">
                                     </div>
@@ -103,11 +88,11 @@
                                         <label for="bairro">Bairro</label>
                                         <input type="text" name="bairro" id="bairro" class="form-control form-control-lg" placeholder="Informe o bairro">
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-6">
                                         <label for="complemento">Complemento</label>
                                         <input type="text" name="complemento" id="complemento" class="form-control form-control-lg" placeholder="Informe o complemento">
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-6">
                                         <label for="ponto_referencia">Ponto de Referência</label>
                                         <input type="text" name="ponto_referencia" class="form-control form-control-lg" placeholder="Informe o ponto de referência">
                                     </div>
@@ -233,8 +218,8 @@
             $("#endereco").val('');
             $("#complemento").val('');
             $("#bairro").val('');
-            // $("#cidade").val('');
-            // $("#uf").val('');
+            $("#cidade").val('');
+            $("#uf").val('');
             alert('CEP INVÁLIDO!');
         }
         else{
@@ -255,8 +240,8 @@
                     $("#endereco").val(resposta.logradouro);
                     $("#complemento").val(resposta.complemento);
                     $("#bairro").val(resposta.bairro);
-                    // $("#cidade").val(resposta.localidade);
-                    // $("#uf").val(resposta.uf);
+                    $("#cidade").val(resposta.localidade);
+                    $("#uf").val(resposta.uf);
                     //Vamos incluir para que o Número seja focado automaticamente
                     //melhorando a experiência do usuário
                     if (resposta.logradouro != null && resposta.logradouro != ""){
@@ -273,8 +258,8 @@
                     $("#endereco").val('');
                     $("#complemento").val('');
                     $("#bairro").val('');
-                    // $("#cidade").val('');
-                    // $("#uf").val('');
+                    $("#cidade").val('');
+                    $("#uf").val('');
                     //Vamos incluir para que o Número seja focado automaticamente
                     //melhorando a experiência do usuário
                     $("#cep").focus();
@@ -285,14 +270,23 @@
 
 
     //obtenção geolocalização por cep
-    var map = L.map('location-map').setView([	-18.539996, -53.133589], 17);
+    var map = L.map('location-map').setView([-18.539996, -53.133589], 17);
       mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
       L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: 'Map data &copy; ' + mapLink,
-          maxZoom: 20,
+          maxZoom: 15,
         }).addTo(map);
         var marker = L.marker([-18.539996, -53.133589]).addTo(map);
+
+    // var map = L.map('location-map').setView([<%= @event.coordinates[1] %>, <%= @event.coordinates[0] %>], 17);
+    //   mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
+    //   L.tileLayer(
+    //     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     attribution: 'Map data &copy; ' + mapLink,
+    //     maxZoom: 20,
+    //   }).addTo(map);
+    //   var marker = L.marker([<%= @event.coordinates[1] %>, <%= @event.coordinates[0] %>]).addTo(map);
 
 
 </script>
