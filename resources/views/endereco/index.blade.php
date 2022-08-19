@@ -8,8 +8,6 @@
 
 <script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
 <link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
-{{--
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" /> --}}
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
 
@@ -66,7 +64,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-4">
                                         <label for="cep">CEP</label>
-                                        <input type="text" name="cep" id="cep" class="form-control form-control-lg" placeholder="Informe o CEP" onchange="geocode(e)">
+                                        <input type="text" name="cep" id="cep" class="form-control form-control-lg" placeholder="Informe o CEP">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="endereco">Endereço (Rua/Avenida)</label>
@@ -89,6 +87,14 @@
                                         <input type="text" name="bairro" id="bairro" class="form-control form-control-lg" placeholder="Informe o bairro">
                                     </div>
                                     <div class="form-group col-md-6">
+                                        <label for="lat">Latitude</label>
+                                        <input type="text" name="lat" id="lat" class="form-control form-control-lg" readonly>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="long">Longitude</label>
+                                        <input type="text" name="long" id="long" class="form-control form-control-lg" readonly>
+                                    </div>
+                                    <div class="form-group col-md-6">
                                         <label for="complemento">Complemento</label>
                                         <input type="text" name="complemento" id="complemento" class="form-control form-control-lg" placeholder="Informe o complemento">
                                     </div>
@@ -102,6 +108,9 @@
                             <div id="location-map"></div>
 
                         </div>
+                    </div>
+                    <div class="col-md-12">
+                        <a onclick="apresentar()" class="btn btn-secondary m-1">Apresentar no mapa A localização CEP</a>
                     </div>
                 </div>
             </div>
@@ -208,7 +217,6 @@
 
     //script relacionado ao CEP
     $('#cep').mask('00.000-000');
-    $('.cpf').mask('000.000.000-00');
 
     $('#cep').on('change', function(){
         var cep = $(this).val().replace(/[.-]/g,"");
@@ -226,7 +234,10 @@
             $.ajax({
                 //O campo URL diz o caminho de onde virá os dados
                 //É importante concatenar o valor digitado no CEP
-                url: 'https://viacep.com.br/ws/'+cep+'/json/',
+
+                // url: 'https://viacep.com.br/ws/'+cep+'/json/',
+
+                url: 'https://brasilapi.com.br/api/cep/v2/'+cep,
                 //Aqui você deve preencher o tipo de dados que será lido,
                 //no caso, estamos lendo JSON.
                 dataType: 'json',
@@ -237,11 +248,13 @@
                 success: function(resposta){
                     //Agora basta definir os valores que você deseja preencher
                     //automaticamente nos campos acima.
-                    $("#endereco").val(resposta.logradouro);
-                    $("#complemento").val(resposta.complemento);
-                    $("#bairro").val(resposta.bairro);
-                    $("#cidade").val(resposta.localidade);
-                    $("#uf").val(resposta.uf);
+                    $("#endereco").val(resposta.street);
+                    // $("#complemento").val(resposta.complemento);
+                    $("#bairro").val(resposta.neighborhood);
+                    $("#cidade").val(resposta.city);
+                    $("#uf").val(resposta.state);
+                    $("#lat").val(resposta.location.coordinates.latitude);
+                    $("#long").val(resposta.location.coordinates.longitude);
                     //Vamos incluir para que o Número seja focado automaticamente
                     //melhorando a experiência do usuário
                     if (resposta.logradouro != null && resposta.logradouro != ""){
@@ -250,6 +263,7 @@
                     else{
                         $("#endereco").focus();
                     }
+
                 },
                 error: function(resposta){
                     //Agora basta definir os valores que você deseja preencher
@@ -260,6 +274,8 @@
                     $("#bairro").val('');
                     $("#cidade").val('');
                     $("#uf").val('');
+                    $("#lat").val('');
+                    $("#long").val('');
                     //Vamos incluir para que o Número seja focado automaticamente
                     //melhorando a experiência do usuário
                     $("#cep").focus();
@@ -270,23 +286,30 @@
 
 
     //obtenção geolocalização por cep
-    var map = L.map('location-map').setView([-18.539996, -53.133589], 17);
+    var map = L.map('location-map').setView([-20.46818922, -54.61853027], 17);
       mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
       L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: 'Map data &copy; ' + mapLink,
-          maxZoom: 15,
+          maxZoom: 5,
         }).addTo(map);
-        var marker = L.marker([-18.539996, -53.133589]).addTo(map);
+        // var marker = L.marker([-20.46818922, -54.61853027]).addTo(map);
 
-    // var map = L.map('location-map').setView([<%= @event.coordinates[1] %>, <%= @event.coordinates[0] %>], 17);
-    //   mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
-    //   L.tileLayer(
-    //     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //     attribution: 'Map data &copy; ' + mapLink,
-    //     maxZoom: 20,
-    //   }).addTo(map);
-    //   var marker = L.marker([<%= @event.coordinates[1] %>, <%= @event.coordinates[0] %>]).addTo(map);
+    function apresentar(){
+
+        lati = $('#lat').val();
+        long = $('#long').val();
+
+        var marker = L.marker([lati, long], 10).addTo(map);
+
+        // var marker = L.marker([lati, long], 10).addTo(map).setCenter(lati, long);
+
+        // marker.setCenter(lati, long);
+        // map.maxZoom(5);
+
+        // console.log(marker);
+
+    }
 
 
 </script>
