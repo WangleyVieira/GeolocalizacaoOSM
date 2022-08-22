@@ -3,8 +3,6 @@
 @section('content')
 
 {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyAUgxBPrGkKz6xNwW6Z1rJh26AqR8ct37A"></script>
-<script src="{{ asset('js/gmaps.js') }}"></script>
 
 <script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
 <link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
@@ -33,177 +31,205 @@
 @include('errors.alerts')
 @include('errors.errors')
 
-<header class="container" style="padding: 2rem; background-color:white">
+{{-- <header class="container" style="padding: 2rem; background-color:white">
     <h2 class="text-center">
         <div>
             <span><i class="fas fa-address-book"></i></span>
         </div>
         <strong>Cadastrar endereço</strong>
     </h2>
-</header>
+</header> --}}
 
-<div class="container" style="padding: 3rem; background-color:white">
+<div class="col-12">
 
     <form action="{{ route('endereco.store') }}" id="form" method="POST">
         @csrf
         @method('POST')
+        <div class="card">
+            <div class="card-body">
 
-        <div id="accordion2">
-            <div class="card">
-                <div class="card-header" id="headingTwo">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                            Dados de endereço
-                        </button>
-                    </h5>
+            <h5>Dados Pessoais</h5>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="form-label">Nome</label>
+                    <input class="form-control form-control-lg" type="text" name="nome" id="nome" placeholder="Informe seu nome" required>
                 </div>
-                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion2">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label for="cep">CEP</label>
-                                        <input type="text" name="cep" id="cep" class="form-control form-control-lg" placeholder="Informe o CEP">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="endereco">Endereço (Rua/Avenida)</label>
-                                        <input type="text" name="endereco" id="endereco" class="form-control form-control-lg" placeholder="Informe o endereço">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="cidade">Cidade</label>
-                                        <input type="text" name="cidade" id="cidade" class="form-control form-control-lg" placeholder="Informe a cidade">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="uf">UF</label>
-                                        <input type="text" name="uf" id="uf" class="form-control form-control-lg" placeholder="Informe a UF">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="numero">Número</label>
-                                        <input type="text" name="numero" id="numero" class="form-control form-control-lg" placeholder="Informe o número">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="bairro">Bairro</label>
-                                        <input type="text" name="bairro" id="bairro" class="form-control form-control-lg" placeholder="Informe o bairro">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="lat">Latitude</label>
-                                        <input type="text" name="lat" id="lat" class="form-control form-control-lg" readonly>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="long">Longitude</label>
-                                        <input type="text" name="long" id="long" class="form-control form-control-lg" readonly>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="complemento">Complemento</label>
-                                        <input type="text" name="complemento" id="complemento" class="form-control form-control-lg" placeholder="Informe o complemento">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="ponto_referencia">Ponto de Referência</label>
-                                        <input type="text" name="ponto_referencia" class="form-control form-control-lg" placeholder="Informe o ponto de referência">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="location-map"></div>
-
+                <div class="form-group col-md-6">
+                    <label class="form-label">CPF</label>
+                    <input class="cpf form-control form-control-lg" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="form-label">Email</label>
+                    <input class="form-control form-control-lg" type="email" name="email" placeholder="Informe um email válido" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="telefone_contato1">Telefone (Celular)</label>
+                    <input type="text" name="telefone_contato1" id="telefone_contato1" value="" class="form-control form-control-lg">
+                </div>
+            </div>
+            <br>
+            <hr>
+            <h5>Dados de endereço</h5>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label for="cep">CEP</label>
+                            <input type="text" name="cep" id="cep" class="form-control form-control-lg" placeholder="Informe o CEP">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="endereco">Endereço (Rua/Avenida)</label>
+                            <input type="text" name="endereco" id="endereco" class="form-control form-control-lg" placeholder="Informe o endereço">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" name="cidade" id="cidade" class="form-control form-control-lg" placeholder="Informe a cidade">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="uf">UF</label>
+                            <input type="text" name="uf" id="uf" class="form-control form-control-lg" placeholder="Informe a UF">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="numero">Número</label>
+                            <input type="text" name="numero" id="numero" class="form-control form-control-lg" placeholder="Informe o número">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="bairro">Bairro</label>
+                            <input type="text" name="bairro" id="bairro" class="form-control form-control-lg" placeholder="Informe o bairro">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="complemento">Complemento</label>
+                            <input type="text" name="complemento" id="complemento" class="form-control form-control-lg" placeholder="Informe o complemento">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="ponto_referencia">Ponto de Referência</label>
+                            <input type="text" name="ponto_referencia" class="form-control form-control-lg" placeholder="Informe o ponto de referência">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="lat">Latitude</label>
+                            <input type="text" name="lat" id="lat" class="form-control form-control-lg">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="long">Longitude</label>
+                            <input type="text" name="long" id="long" class="form-control form-control-lg">
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <a onclick="apresentar()" class="btn btn-secondary m-1">Apresentar no mapa A localização CEP</a>
-                    </div>
                 </div>
+
+                <div id="location-map"></div>
+
             </div>
         </div>
-
-        {{-- <div id="accordion3">
-            <div class="card">
-                <div class="card-header" id="headingThree">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Coordenadas do cliente
-                    </button>
-                </h5>
-                </div>
-                <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordion3">
-                    <div class="card-body">
-                        <legend>Pontos únicos</legend>
-                        <div class="row mb-2" id="pontos1">
-                            <div class="col-md-4" id="ponto1" style="border: 0.5px solid #CBCBCB">
-                                <div class="col-12"><strong style="color: black">Ponto 1</strong></div>
-                                <label class="form-label" for="latitudePonto[]">Latitude (graus decimais)</label>
-                                <input type="text" name="latitudePonto[]" id="latPonto1" class="form-control mb-2" required>
-                                <label class="form-label" for="longitudePonto[]">Longitude (graus decimais)</label>
-                                <input type="text" name="longitudePonto[]" id="longPonto1" class="form-control mb-2" required>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="descPonto">Descrição</label>
-                                <input type="text" name="descPonto" id="descPonto" class="form-control" value="{{ old('descPonto') }}">
-                            </div>
-
-                            <div class="col-md-12">
-                                <a onclick="adicionar1()" class="btn btn-success btn-pill float-left m-1">Adicionar ponto</a>
-                                <a onclick="remover1()" class="btn btn-danger btn-pill float-left m-1">Remover ponto</a>
-                                <a onclick="apresentar1()" class="btn btn-secondary float-right m-1">Apresentar no mapa</a>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mt-3" style="height: 300px;">
-                            <div id="map1" style="height: 100%;"></div>
-                        </div>
-                        <hr class="mt-5">
-                        <legend>Figuras</legend>
-                        <div class="row mb-2" id="pontos2">
-                            <div class="col-md-4" id="pontoFigura1" style="border: 0.5px solid #CBCBCB">
-                                <div class="col-12"><strong style="color: black">Ponto 1</strong></div>
-                                <label class="form-label" for="latitudeFigura[]">Latitude (graus decimais)</label>
-                                <input type="text" name="latitudeFigura[]" id="latFigura1" class="form-control mb-2" required>
-                                <label class="form-label" for="longitudeFigura[]">Longitude (graus decimais)</label>
-                                <input type="text" name="longitudeFigura[]" id="longFigura1" class="form-control mb-2" required>
-                            </div>
-                            <div class="col-md-4" id="pontoFigura2" style="border: 0.5px solid #CBCBCB">
-                                <div class="col-12"><strong style="color: black">Ponto 2</strong></div>
-                                <label class="form-label" for="latitudeFigura[]">Latitude (graus decimais)</label>
-                                <input type="text" name="latitudeFigura[]" id="latFigura2" class="form-control mb-2" required>
-                                <label class="form-label" for="longitudeFigura[]">Longitude (graus decimais)</label>
-                                <input type="text" name="longitudeFigura[]" id="longFigura2" class="form-control mb-2" required>
-                            </div>
-                            <div class="col-md-4" id="pontoFigura3" style="border: 0.5px solid #CBCBCB">
-                                <div class="col-12"><strong style="color: black">Ponto 3</strong></div>
-                                <label class="form-label" for="latitudeFigura[]">Latitude (graus decimais)</label>
-                                <input type="text" name="latitudeFigura[]" id="latFigura3" class="form-control mb-2" required>
-                                <label class="form-label" for="longitudeFigura[]">Longitude (graus decimais)</label>
-                                <input type="text" name="longitudeFigura[]" id="longFigura3" class="form-control mb-2" required>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="descFigura">Descrição</label>
-                                <input type="text" name="descFigura" id="descFigura" class="form-control" value="{{ old('descFigura') }}">
-                            </div>
-
-                            <div class="col-md-12">
-                                <a onclick="adicionar2()" class="btn btn-success btn-pill float-left m-1">Adicionar ponto</a>
-                                <a onclick="remover2()" class="btn btn-danger btn-pill float-left m-1">Remover ponto</a>
-                                <a onclick="apresentar2()" class="btn btn-secondary float-right m-1">Apresentar no mapa</a>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mt-3" style="height: 300px;">
-                            <div id="map2" style="height: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
+        <div class="col-md-12">
+            <a onclick="apresentar()" class="btn btn-secondary m-1">Apresentar no mapa</a>
+            <button type="submit" class="btn btn-primary m-1">Cadastrar</button>
+        </div>
         <br>
-        <div class="container-fluid">
-            <button type="submit" style="width: 130px;" class="btn btn-primary p-2">Cadastrar</button>
-        </div>
     </form>
 
+    <div id="accordion3">
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                        Listagem
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordion3">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center" id="datatable-responsive">
+                            <thead>
+                                <tr>
+                                    <th scope="col">id</th>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">CPF</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Contato</th>
+                                    <th scope="col">CEP</th>
+                                    <th scope="col">Endereço</th>
+                                    <th scope="col">Cidade</th>
+                                    <th scope="col">UF</th>
+                                    <th scope="col">Número</th>
+                                    <th scope="col">Bairro</th>
+                                    <th scope="col">Complemento</th>
+                                    <th scope="col">Ponto de referência</th>
+                                    <th scope="col">Geolocalização</th>
+                                    <th scope="col">Cadastrado Por</th>
+                                    <th scope="col">Ver mapa</th>
+                                    <th scope="col">Alterar</th>
+                                    <th scope="col">Excluir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($enderecos as $end)
+                                <tr>
+                                    <td>{{ $end->id }}</td>
+                                    <td>{{ $end->nome }}</td>
+                                    <td>{{ $end->cpf }}</td>
+                                    <td>{{ $end->email }}</td>
+                                    <td>{{ $end->telefone }}</td>
+                                    <td>{{ $end->cep != null ? $end->cep : 'não informado' }}</td>
+                                    <td>{{ $end->endereco != null ? $end->endereco : 'não informado' }}</td>
+                                    <td>{{ $end->cidade != null ? $end->cidade : 'não informado' }}</td>
+                                    <td>{{ $end->uf != null ? $end->uf : 'não informado' }}</td>
+                                    <td>{{ $end->numero != null ? $end->numero : 'não informado' }}</td>
+                                    <td>{{ $end->bairro != null ? $end->bairro : 'não informado' }}</td>
+                                    <td>{{ $end->complemento != null ? $end->complemento : 'não informado' }}</td>
+                                    <td>{{ $end->ponto_referencia != null ? $end->ponto_referencia : 'não informado' }}</td>
+                                    <td>
+                                        Latitude: {{ $end->lat != null ? $end->lat : 'não informado' }}<br>
+                                        Longitude: {{ $end->long != null ? $end->long : 'não informado' }}
+                                    </td>
+                                    <td>{{ isset($end->cadastradoPorUsuario) ? $end->user->name : 'nativo do sistema' }}</td>
+                                    <td>
+                                        <a onclick="apresentar2({{ $end->id }})" class="btn btn-secondary m-1"><i class="align-middle me-2 fas fa-fw fa-map-marked"></i></a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('endereco.edit', $end->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
+                                    </td>
+                                    <td>
+                                        <a data-toggle="modal" data-target="#dangerModal{{ $end->id }}" class="btn btn-danger m-1"><i class="align-middle me-2 fas fa-fw fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                                {{-- modal de delete --}}
+                                <div class="modal fade" id="dangerModal{{ $end->id }}" tabindex="-1" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+
+                                            <form action="{{ route('endereco.destroy', $end->id) }}" method="POST" id="delete_form">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Tem certeza?</h5>
+                                                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <label for="motivo" class="form-label">Motivo</label>
+                                                            <input type="text" class="form-control" name="motivo" id="" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
@@ -215,6 +241,8 @@
 
 <script>
 
+    $('.cpf').mask('000.000.000-00');
+    $('#telefone_contato1').mask('(00) 0 0000-0000');
     //script relacionado ao CEP
     $('#cep').mask('00.000-000');
 
@@ -310,6 +338,45 @@
         // console.log(marker);
 
     }
+
+    $(document).ready(function() {
+        // $.noConflict();
+
+        // $('.select2').select2({
+        //     language: {
+        //         noResults: function() {
+        //             return "Nenhum resultado encontrado";
+        //         }
+        //     },
+        //     closeOnSelect: true,
+        //     width: '100%',
+        // });
+
+        $('#datatable-responsive').dataTable({
+            "order": [[ 0, "asc" ]],
+            "columnDefs": [
+                {
+                    "targets": [ 0 ],
+                    "searchable": false,
+                    "visible": false
+                }
+            ],
+            "oLanguage": {
+                "sLengthMenu": "Mostrar _MENU_ registros por página",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
+                "sInfoFiltered": "(filtrado de _MAX_ registros)",
+                "sSearch": "Pesquisar: ",
+                "oPaginate": {
+                    "sFirst": "Início",
+                    "sPrevious": "Anterior",
+                    "sNext": "Próximo",
+                    "sLast": "Último"
+                }
+            },
+        });
+    });
 
 
 </script>

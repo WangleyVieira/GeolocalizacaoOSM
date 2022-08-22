@@ -14,7 +14,11 @@ class CreateEnderecosTable extends Migration
     public function up()
     {
         Schema::create('enderecos', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+            $table->string('nome');
+            $table->string('cpf')->unique();
+            $table->string('email')->unique();
+            $table->string('telefone')->unique();
             $table->string('cep');
             $table->string('endereco')->nullable();
             $table->string('cidade')->nullable();
@@ -23,12 +27,18 @@ class CreateEnderecosTable extends Migration
             $table->string('bairro')->nullable();
             $table->string('complemento')->nullable();
             $table->string('ponto_referencia')->nullable();
-            $table->integer('id_user')->unsigned()->nullable();
-            $table->foreign('id_user')->references('id')->on('users');
-            $table->integer('cadastradoPorUsuario')->unsigned()->nullable();
+            $table->string('lat')->nullable();
+            $table->string('long')->nullable();
+            // $table->bigInteger('id_user')->unsigned()->nullable();
+            // $table->foreign('id_user')->references('id')->on('users');
+            $table->bigInteger('cadastradoPorUsuario')->unsigned()->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
-            $table->integer('alteradoPorUsuario')->unsigned()->nullable();
+            $table->bigInteger('alteradoPorUsuario')->unsigned()->nullable();
             $table->foreign('alteradoPorUsuario')->references('id')->on('users');
+            $table->bigInteger('inativadoPorUsuario')->unsigned()->nullable();
+            $table->foreign('inativadoPorUsuario')->references('id')->on('users');
+            $table->text('motivoInativado')->nullable();
+            $table->date('dataInativado')->nullable();
             $table->boolean('ativo')->nullable();
             $table->timestamps();
         });

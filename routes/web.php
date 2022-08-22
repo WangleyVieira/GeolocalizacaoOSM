@@ -27,4 +27,7 @@ Route::get('/home', ['middleware' => 'auth', 'uses' => 'HomeController@index'])-
 Route::group(['prefix' => '/endereco', 'as' => 'endereco.', 'middleware' => 'auth'], function(){
     Route::get('', 'EnderecoController@index')->name('index');
     Route::post('/store', 'EnderecoController@store')->name('store');
+    Route::post('/destroy/{id}', 'EnderecoController@destroy')->name('destroy');
+    Route::get('/edit/{id}', 'EnderecoController@edit')->name('edit');
+    Route::post('/update/{id}', 'EnderecoController@update')->name('update');
 });
