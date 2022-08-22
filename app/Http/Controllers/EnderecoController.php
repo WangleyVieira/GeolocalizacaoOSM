@@ -112,9 +112,8 @@ class EnderecoController extends Controller
     {
         try {
             $end = Endereco::find($id);
-            $users = User::where('ativo', '=', 1)->get();
 
-            return view('endereco.edit', compact('end', 'users'));
+            return view('endereco.edit', compact('end'));
         } catch (\Exception $ex) {
             return $ex->getMessage();
             // return redirect()->back()->with('erro', 'Entre em contato com administrador do sistema.');
@@ -128,9 +127,55 @@ class EnderecoController extends Controller
      * @param  \App\Endereco  $endereco
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Endereco $endereco)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            if($request->cep == null || $request->endereco == null || $request->numero == null){
+                return redirect()->back()->with('erro', 'Campos CEP, endereço e número, são obrigatórios.');
+            }
+
+             //varifica se já existe um email ativo cadaastrado no BD
+             $verifica_user = Endereco::where('email', '=', $request->email)
+             ->orWhere('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))
+             ->select('id', 'email', 'cpf')
+             ->first();
+
+         //existe um email cadastrado?
+         if($verifica_user){
+             if ($verifica_user->id != $id) {
+                 return redirect()->back()->with('erro', 'Já existe um usuário cadastrado com esse email e/ou CPF.');
+             }
+         }
+
+            $endereco =  Endereco::find($id);
+            //dados da pessoa
+            $endereco->nome = $request->nome;
+            $endereco->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
+            $endereco->email = $request->email;
+            $endereco->telefone = preg_replace('/[^0-9]/', '', $request->telefone_contato1);
+            //dados de endereço
+            $endereco->cep = preg_replace('/[^0-9]/', '', $request->cep);
+            $endereco->cidade = $request->cidade;
+            $endereco->endereco = $request->endereco;
+            $endereco->uf = $request->uf;
+            $endereco->numero = $request->numero;
+            $endereco->bairro = $request->bairro;
+            $endereco->complemento = $request->complemento;
+            $endereco->ponto_referencia = $request->ponto_referencia;
+            $endereco->lat = $request->lat;
+            $endereco->long = $request->long;
+            // $endereco->id_user = auth()->user()->id;
+            $endereco->alteradoPorUsuario = auth()->user()->id;
+            $endereco->ativo = 1;
+
+            $endereco->save();
+
+            return redirect()->route('endereco.index')->with('success', 'Dados de endereço alterado com sucesso');
+
+        } catch (\Exception $ex) {
+            return redirect()->back()->with('erro', 'Entre em contato com administrador do sistema.');
+            // return $ex->getMessage();
+        }
     }
 
     /**

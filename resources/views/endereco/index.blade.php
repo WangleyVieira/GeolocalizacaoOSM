@@ -2,43 +2,9 @@
 
 @section('content')
 
-{{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
-<script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
-<link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
-
-<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
-
-
-<style>
-    .error{
-        color:red
-    }
-
-    #location-map{
-        background: #fff;
-        border: none;
-        height: 540px;
-        width: 100%;
-
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-      }
-</style>
 @include('errors.alerts')
 @include('errors.errors')
-
-{{-- <header class="container" style="padding: 2rem; background-color:white">
-    <h2 class="text-center">
-        <div>
-            <span><i class="fas fa-address-book"></i></span>
-        </div>
-        <strong>Cadastrar endereço</strong>
-    </h2>
-</header> --}}
 
 <div class="col-12">
 
@@ -69,33 +35,34 @@
             </div>
             <br>
             <hr>
+            <br>
             <h5>Dados de endereço</h5>
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label for="cep">CEP</label>
-                            <input type="text" name="cep" id="cep" class="form-control form-control-lg" placeholder="Informe o CEP">
+                            <input type="text" name="cep" id="cep" class="form-control form-control-lg" placeholder="Informe o CEP" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="endereco">Endereço (Rua/Avenida)</label>
-                            <input type="text" name="endereco" id="endereco" class="form-control form-control-lg" placeholder="Informe o endereço">
+                            <input type="text" name="endereco" id="endereco" class="form-control form-control-lg" placeholder="Informe o endereço" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="cidade">Cidade</label>
-                            <input type="text" name="cidade" id="cidade" class="form-control form-control-lg" placeholder="Informe a cidade">
+                            <input type="text" name="cidade" id="cidade" class="form-control form-control-lg" placeholder="Informe a cidade" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="uf">UF</label>
-                            <input type="text" name="uf" id="uf" class="form-control form-control-lg" placeholder="Informe a UF">
+                            <input type="text" name="uf" id="uf" class="form-control form-control-lg" placeholder="Informe a UF" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="numero">Número</label>
-                            <input type="text" name="numero" id="numero" class="form-control form-control-lg" placeholder="Informe o número">
+                            <input type="text" name="numero" id="numero" class="form-control form-control-lg" placeholder="Informe o número" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="bairro">Bairro</label>
-                            <input type="text" name="bairro" id="bairro" class="form-control form-control-lg" placeholder="Informe o bairro">
+                            <input type="text" name="bairro" id="bairro" class="form-control form-control-lg" placeholder="Informe o bairro" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="complemento">Complemento</label>
@@ -106,19 +73,20 @@
                             <input type="text" name="ponto_referencia" class="form-control form-control-lg" placeholder="Informe o ponto de referência">
                         </div>
                         <div class="form-group col-md-2">
-                            <label for="lat">Latitude</label>
+                            <label for="lat">Latitude (graus decimais)</label>
                             <input type="text" name="lat" id="lat" class="form-control form-control-lg">
                         </div>
                         <div class="form-group col-md-2">
-                            <label for="long">Longitude</label>
+                            <label for="long">Longitude (graus decimais)</label>
                             <input type="text" name="long" id="long" class="form-control form-control-lg">
                         </div>
                     </div>
                 </div>
-
-                <div id="location-map"></div>
-
             </div>
+
+            <div id="map"></div>
+
+            {{-- </div> --}}
         </div>
         <div class="col-md-12">
             <a onclick="apresentar()" class="btn btn-secondary m-1">Apresentar no mapa</a>
@@ -201,7 +169,7 @@
                                             <form action="{{ route('endereco.destroy', $end->id) }}" method="POST" id="delete_form">
                                                 @csrf
                                                 @method('POST')
-                                                <div class="modal-header">
+                                                <div class="modal-header" style="background-color: rgb(218, 105, 105)">
                                                     <h5 class="modal-title">Tem certeza?</h5>
                                                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                                                 </div>
@@ -314,44 +282,48 @@
 
 
     //obtenção geolocalização por cep
-    var map = L.map('location-map').setView([-20.46818922, -54.61853027], 17);
-      mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
-      L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: 'Map data &copy; ' + mapLink,
-          maxZoom: 5,
-        }).addTo(map);
+    // var map = L.map('location-map').setView([-20.46818922, -54.61853027], 17);
+    //   mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
+    //   L.tileLayer(
+    //     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //       attribution: 'Map data &copy; ' + mapLink,
+    //       maxZoom: 15,
+    //     }).addTo(map);
         // var marker = L.marker([-20.46818922, -54.61853027]).addTo(map);
+    var map = L.map('map').setView([-20.46818922, -54.61853027], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
 
     function apresentar(){
 
         lati = $('#lat').val();
         long = $('#long').val();
 
-        var marker = L.marker([lati, long], 10).addTo(map);
+        if (lati == '' || long == '') {
+            alert('CEP não localizado, informar latitude e longitude para localizar.')
+            return;
+        }
 
-        // var marker = L.marker([lati, long], 10).addTo(map).setCenter(lati, long);
-
-        // marker.setCenter(lati, long);
-        // map.maxZoom(5);
-
-        // console.log(marker);
-
+        var marker = L.marker([lati, long]).addTo(map)
+            .bindPopup('Geolocalização do CEP')
+            .openPopup();
     }
 
+    // function apresentar2(){
+
+    //     lati = document.querySelector("#lat");
+    //     long = document.querySelector("#long");
+
+    //     var marker = L.marker([lati, long]).addTo(map)
+    //         .bindPopup('Geolocalização do CEP')
+    //         .openPopup();
+    // }
+
+
+
     $(document).ready(function() {
-        // $.noConflict();
-
-        // $('.select2').select2({
-        //     language: {
-        //         noResults: function() {
-        //             return "Nenhum resultado encontrado";
-        //         }
-        //     },
-        //     closeOnSelect: true,
-        //     width: '100%',
-        // });
-
         $('#datatable-responsive').dataTable({
             "order": [[ 0, "asc" ]],
             "columnDefs": [
@@ -380,5 +352,4 @@
 
 
 </script>
-
 @endsection

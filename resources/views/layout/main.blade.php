@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
-    <title>STIECSA</title>
+    <title>Cadastro de endereço</title>
     <link rel="shortcut icon" type="svg" href="{{ asset('image/layer-group-solid.svg') }}" style="color: #4a88eb">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
@@ -17,6 +17,32 @@
     <link href="{{asset('select2-4.1.0/dist/css/select2.min.css')}}" rel="stylesheet" />
     <link rel="stylesheet" href="{{asset('select2-bootstrap/dist/select2-bootstrap.css')}}"/>
     <script src="{{ asset('js/jquery.js') }}"></script>
+
+    {{-- scripts e links do mapa --}}
+    <script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
+    <link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
+
+    {{-- style referente ao mapa --}}
+    <style>
+        .error{
+            color:red
+        }
+
+        #map{
+            background: #fff;
+            border: none;
+            height: 540px;
+            width: 100%;
+
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+          }
+    </style>
 </head>
 
 <div class="wrapper">
@@ -129,5 +155,129 @@
 <script src="{{ url('js/prevent_multiple_submits.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.js"></script>
 <script src="{{asset('select2-4.1.0/dist/js/select2.min.js')}}"></script>
+{{--
+<script>
+
+    $('.cpf').mask('000.000.000-00');
+    $('#telefone_contato1').mask('(00) 0 0000-0000');
+    //script relacionado ao CEP
+    $('#cep').mask('00.000-000');
+
+    $('#cep').on('change', function(){
+        var cep = $(this).val().replace(/[.-]/g,"");
+        // console.log('CEP: ', cep);
+        // console.log('Quantidade de caracteres: ', cep.length);
+        if (cep.length != 8){
+            $("#endereco").val('');
+            $("#complemento").val('');
+            $("#bairro").val('');
+            $("#cidade").val('');
+            $("#uf").val('');
+            alert('CEP INVÁLIDO!');
+        }
+        else{
+            $.ajax({
+                //O campo URL diz o caminho de onde virá os dados
+                //É importante concatenar o valor digitado no CEP
+
+                // url: 'https://viacep.com.br/ws/'+cep+'/json/',
+
+                url: 'https://brasilapi.com.br/api/cep/v2/'+cep,
+                //Aqui você deve preencher o tipo de dados que será lido,
+                //no caso, estamos lendo JSON.
+                dataType: 'json',
+                //SUCESS é referente a função que será executada caso
+                //ele consiga ler a fonte de dados com sucesso.
+                //O parâmetro dentro da função se refere ao nome da variável
+                //que você vai dar para ler esse objeto.
+                success: function(resposta){
+                    //Agora basta definir os valores que você deseja preencher
+                    //automaticamente nos campos acima.
+                    $("#endereco").val(resposta.street);
+                    // $("#complemento").val(resposta.complemento);
+                    $("#bairro").val(resposta.neighborhood);
+                    $("#cidade").val(resposta.city);
+                    $("#uf").val(resposta.state);
+                    $("#lat").val(resposta.location.coordinates.latitude);
+                    $("#long").val(resposta.location.coordinates.longitude);
+                    //Vamos incluir para que o Número seja focado automaticamente
+                    //melhorando a experiência do usuário
+                    if (resposta.logradouro != null && resposta.logradouro != ""){
+                        $("#numero").focus();
+                    }
+                    else{
+                        $("#endereco").focus();
+                    }
+
+                },
+                error: function(resposta){
+                    //Agora basta definir os valores que você deseja preencher
+                    //automaticamente nos campos acima.
+                    alert("Erro, CEP inválido");
+                    $("#endereco").val('');
+                    $("#complemento").val('');
+                    $("#bairro").val('');
+                    $("#cidade").val('');
+                    $("#uf").val('');
+                    $("#lat").val('');
+                    $("#long").val('');
+                    //Vamos incluir para que o Número seja focado automaticamente
+                    //melhorando a experiência do usuário
+                    $("#cep").focus();
+                },
+            });
+        }
+    });
+
+    var map = L.map('map').setView([-20.46818922, -54.61853027], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+
+    function apresentar(){
+
+        lati = $('#lat').val();
+        long = $('#long').val();
+
+        if (lati == '' || long == '') {
+            alert('CEP não localizado, informar latitude e longitude para localizar.')
+            return;
+        }
+
+        var marker = L.marker([endereco, bairro, cidade, numero]).addTo(map)
+            .bindPopup('Geolocalização do CEP')
+            .openPopup();
+    }
+
+    $(document).ready(function() {
+        $('#datatable-responsive').dataTable({
+            "order": [[ 0, "asc" ]],
+            "columnDefs": [
+                {
+                    "targets": [ 0 ],
+                    "searchable": false,
+                    "visible": false
+                }
+            ],
+            "oLanguage": {
+                "sLengthMenu": "Mostrar _MENU_ registros por página",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
+                "sInfoFiltered": "(filtrado de _MAX_ registros)",
+                "sSearch": "Pesquisar: ",
+                "oPaginate": {
+                    "sFirst": "Início",
+                    "sPrevious": "Anterior",
+                    "sNext": "Próximo",
+                    "sLast": "Último"
+                }
+            },
+        });
+    });
+
+
+</script> --}}
 @yield('scripts')
 </html>

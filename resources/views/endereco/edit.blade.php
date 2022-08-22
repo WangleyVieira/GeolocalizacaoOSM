@@ -2,32 +2,6 @@
 
 @section('content')
 
-{{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
-
-<script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
-<link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
-
-<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
-
-
-<style>
-    .error{
-        color:red
-    }
-
-    #location-map{
-        background: #fff;
-        border: none;
-        height: 540px;
-        width: 100%;
-
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-      }
-</style>
 @include('errors.alerts')
 @include('errors.errors')
 
@@ -68,6 +42,7 @@
             </div>
             <br>
             <hr>
+            <br>
             <h5>Dados de endereço</h5>
             <div class="row">
                 <div class="col-md-12">
@@ -105,23 +80,23 @@
                             <input type="text" name="ponto_referencia" class="form-control form-control-lg" value="{{ $end->ponto_referencia }}" placeholder="Informe o ponto de referência">
                         </div>
                         <div class="form-group col-md-2">
-                            <label for="lat">Latitude</label>
+                            <label for="lat">Latitude (graus decimais)</label>
                             <input type="text" name="lat" id="lat" class="form-control form-control-lg" value="{{ $end->lat }}">
                         </div>
                         <div class="form-group col-md-2">
-                            <label for="long">Longitude</label>
+                            <label for="long">Longitude (graus decimais)</label>
                             <input type="text" name="long" id="long" class="form-control form-control-lg" value="{{ $end->long }}">
                         </div>
                     </div>
                 </div>
 
-                <div id="location-map"></div>
+                <div id="map"></div>
 
             </div>
         </div>
         <div class="col-md-12">
             <a onclick="apresentar()" class="btn btn-secondary m-1">Apresentar no mapa</a>
-            <button type="submit" class="btn btn-primary m-1">Alterar</button>
+            <button type="submit" class="btn btn-warning m-1">Alterar</button>
         </div>
         <br>
     </form>
@@ -208,48 +183,26 @@
     });
 
 
-    //obtenção geolocalização por cep
-    var map = L.map('location-map').setView([-20.46818922, -54.61853027], 17);
-      mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
-      L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: 'Map data &copy; ' + mapLink,
-          maxZoom: 5,
+    var map = L.map('map').setView([-20.46818922, -54.61853027], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        // var marker = L.marker([-20.46818922, -54.61853027]).addTo(map);
+
 
     function apresentar(){
 
         lati = $('#lat').val();
         long = $('#long').val();
 
-        var marker = L.marker([lati, long], 10).addTo(map);
+        if (lati == '' || long == '') {
+            alert('CEP não localizado, informar latitude e longitude para localizar.')
+            return;
+        }
 
-        // var marker = L.marker([lati, long], 10).addTo(map).setCenter(lati, long);
-
-        // marker.setCenter(lati, long);
-        // map.maxZoom(5);
-
-        // console.log(marker);
-
+        var marker = L.marker([lati, long]).addTo(map)
+            .bindPopup('Geolocalização do CEP')
+            .openPopup();
     }
-
-    function apresentar2(id){
-        map.removeMarkers();
-
-        lati = document.getElementById('lat'+id).textContent;
-        long = document.getElementById('long'+id).textContent;
-
-        map.setCenter(lati,long);
-        map.setZoom(16);
-
-        map.addMarker({
-            lat: lati,
-            lng: long
-        });
-    }
-
 
 </script>
-
 @endsection
