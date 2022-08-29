@@ -71,6 +71,13 @@
                         Endereço
                     </a>
                 </li>
+
+                <li class="sidebar-item {{ Route::current()->uri == 'assinatura' ? 'active' : null }}">
+                    <a href="{{ route('assinatura.index') }}" class="sidebar-link">
+                        <i class="fas fa-file"></i>
+                        Assinatura
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -155,101 +162,7 @@
 <script src="{{ url('js/prevent_multiple_submits.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.js"></script>
 <script src="{{asset('select2-4.1.0/dist/js/select2.min.js')}}"></script>
-{{--
 <script>
-
-    $('.cpf').mask('000.000.000-00');
-    $('#telefone_contato1').mask('(00) 0 0000-0000');
-    //script relacionado ao CEP
-    $('#cep').mask('00.000-000');
-
-    $('#cep').on('change', function(){
-        var cep = $(this).val().replace(/[.-]/g,"");
-        // console.log('CEP: ', cep);
-        // console.log('Quantidade de caracteres: ', cep.length);
-        if (cep.length != 8){
-            $("#endereco").val('');
-            $("#complemento").val('');
-            $("#bairro").val('');
-            $("#cidade").val('');
-            $("#uf").val('');
-            alert('CEP INVÁLIDO!');
-        }
-        else{
-            $.ajax({
-                //O campo URL diz o caminho de onde virá os dados
-                //É importante concatenar o valor digitado no CEP
-
-                // url: 'https://viacep.com.br/ws/'+cep+'/json/',
-
-                url: 'https://brasilapi.com.br/api/cep/v2/'+cep,
-                //Aqui você deve preencher o tipo de dados que será lido,
-                //no caso, estamos lendo JSON.
-                dataType: 'json',
-                //SUCESS é referente a função que será executada caso
-                //ele consiga ler a fonte de dados com sucesso.
-                //O parâmetro dentro da função se refere ao nome da variável
-                //que você vai dar para ler esse objeto.
-                success: function(resposta){
-                    //Agora basta definir os valores que você deseja preencher
-                    //automaticamente nos campos acima.
-                    $("#endereco").val(resposta.street);
-                    // $("#complemento").val(resposta.complemento);
-                    $("#bairro").val(resposta.neighborhood);
-                    $("#cidade").val(resposta.city);
-                    $("#uf").val(resposta.state);
-                    $("#lat").val(resposta.location.coordinates.latitude);
-                    $("#long").val(resposta.location.coordinates.longitude);
-                    //Vamos incluir para que o Número seja focado automaticamente
-                    //melhorando a experiência do usuário
-                    if (resposta.logradouro != null && resposta.logradouro != ""){
-                        $("#numero").focus();
-                    }
-                    else{
-                        $("#endereco").focus();
-                    }
-
-                },
-                error: function(resposta){
-                    //Agora basta definir os valores que você deseja preencher
-                    //automaticamente nos campos acima.
-                    alert("Erro, CEP inválido");
-                    $("#endereco").val('');
-                    $("#complemento").val('');
-                    $("#bairro").val('');
-                    $("#cidade").val('');
-                    $("#uf").val('');
-                    $("#lat").val('');
-                    $("#long").val('');
-                    //Vamos incluir para que o Número seja focado automaticamente
-                    //melhorando a experiência do usuário
-                    $("#cep").focus();
-                },
-            });
-        }
-    });
-
-    var map = L.map('map').setView([-20.46818922, -54.61853027], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-
-    function apresentar(){
-
-        lati = $('#lat').val();
-        long = $('#long').val();
-
-        if (lati == '' || long == '') {
-            alert('CEP não localizado, informar latitude e longitude para localizar.')
-            return;
-        }
-
-        var marker = L.marker([endereco, bairro, cidade, numero]).addTo(map)
-            .bindPopup('Geolocalização do CEP')
-            .openPopup();
-    }
-
     $(document).ready(function() {
         $('#datatable-responsive').dataTable({
             "order": [[ 0, "asc" ]],
@@ -276,8 +189,6 @@
             },
         });
     });
-
-
-</script> --}}
+</script>
 @yield('scripts')
 </html>

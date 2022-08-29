@@ -200,7 +200,7 @@
         }
 
         var marker = L.marker([lati, long]).addTo(map)
-            .bindPopup('Geolocalização do CEP')
+            .bindPopup('Geolocalização aproximada do CEP')
             .openPopup();
     }
 

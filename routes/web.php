@@ -21,7 +21,20 @@ Route::get('/', 'Auth\LoginController@index')->name('login');
 Route::post('/logout', 'Auth\LogoutController@logout')->name('logout');
 Route::post('/autenticacao', 'Auth\LoginController@autenticacao')->name('login.autenticacao');
 
+//Rota home
 Route::get('/home', ['middleware' => 'auth', 'uses' => 'HomeController@index'])->name('home');
+
+//Registrar novo usuário
+Route::get('/registrar', 'UserController@index')->name('registar_usuario');
+Route::post('/store', 'UserController@store')->name('registrar_store');
+
+
+//Assinatura Docs
+Route::group(['prefix' => '/assinatura', 'as' => 'assinatura.', 'middleware' => 'auth'], function(){
+    Route::get('/', 'AssinaturaController@index')->name('index');
+});
+
+
 
 //Endereco
 Route::group(['prefix' => '/endereco', 'as' => 'endereco.', 'middleware' => 'auth'], function(){

@@ -53,16 +53,16 @@
                             <input type="text" name="cidade" id="cidade" class="form-control form-control-lg" placeholder="Informe a cidade" required>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="uf">UF</label>
-                            <input type="text" name="uf" id="uf" class="form-control form-control-lg" placeholder="Informe a UF" required>
-                        </div>
-                        <div class="form-group col-md-4">
                             <label for="numero">Número</label>
                             <input type="text" name="numero" id="numero" class="form-control form-control-lg" placeholder="Informe o número" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="bairro">Bairro</label>
                             <input type="text" name="bairro" id="bairro" class="form-control form-control-lg" placeholder="Informe o bairro" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="uf">UF</label>
+                            <input type="text" name="uf" id="uf" class="form-control form-control-lg" placeholder="Informe a UF" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="complemento">Complemento</label>
@@ -214,6 +214,7 @@
     //script relacionado ao CEP
     $('#cep').mask('00.000-000');
 
+    //busca realizado por CEP
     $('#cep').on('change', function(){
         var cep = $(this).val().replace(/[.-]/g,"");
         // console.log('CEP: ', cep);
@@ -231,9 +232,8 @@
                 //O campo URL diz o caminho de onde virá os dados
                 //É importante concatenar o valor digitado no CEP
 
-                // url: 'https://viacep.com.br/ws/'+cep+'/json/',
-
                 url: 'https://brasilapi.com.br/api/cep/v2/'+cep,
+
                 //Aqui você deve preencher o tipo de dados que será lido,
                 //no caso, estamos lendo JSON.
                 dataType: 'json',
@@ -281,21 +281,99 @@
     });
 
 
-    //obtenção geolocalização por cep
-    // var map = L.map('location-map').setView([-20.46818922, -54.61853027], 17);
-    //   mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
-    //   L.tileLayer(
-    //     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //       attribution: 'Map data &copy; ' + mapLink,
-    //       maxZoom: 15,
-    //     }).addTo(map);
-        // var marker = L.marker([-20.46818922, -54.61853027]).addTo(map);
+    //busca realizar pelo endereço (rua, número, cidade, estado)
+    // $('#cep').on('change', function(){
+    //     var cep = $(this).val().replace(/[.-]/g,"");
+    //     var endereco = $(this).val();
+    //     // var bairro = $(this).val();
+    //     var cidade = $(this).val();
+    //     var uf = $(this).val();
+    //     // console.log('CEP: ', cep);
+    //     // console.log('Quantidade de caracteres: ', cep.length);
+    //     if (cep.length != 8){
+    //         $("#endereco").val('');
+    //         // $("#complemento").val('');
+    //         // $("#bairro").val('');
+    //         $("#cidade").val('');
+    //         $("#uf").val('');
+    //         alert('CEP INVÁLIDO!');
+    //     }
+    //     else{
+    //         $.ajax({
+    //             //O campo URL diz o caminho de onde virá os dados
+    //             //É importante concatenar o valor digitado no CEP
+
+    //             url: 'https://nominatim.openstreetmap.org/?addressdetails=1&q=${cidade}&q=${endereco},${numero}&format=json&limit=1',
+
+    //             // url: 'https://nominatim.openstreetmap.org/?addressdetails=1&q='+cidade+'&q='+$endereco+','+numero+'&format=json&limit=1',
+
+    //             //Aqui você deve preencher o tipo de dados que será lido,
+    //             //no caso, estamos lendo JSON.
+    //             dataType: 'json',
+    //             //SUCESS é referente a função que será executada caso
+    //             //ele consiga ler a fonte de dados com sucesso.
+    //             //O parâmetro dentro da função se refere ao nome da variável
+    //             //que você vai dar para ler esse objeto.
+    //             success: function(resposta){
+    //                 //Agora basta definir os valores que você deseja preencher
+    //                 //automaticamente nos campos acima.
+    //                 $("#endereco").val(resposta.road);
+    //                 // $("#complemento").val(resposta.complemento);
+    //                 $("#bairro").val(resposta.neighbourhood);
+    //                 $("#cidade").val(resposta.city);
+    //                 $("#uf").val(resposta.state);
+    //                 $("#lat").val(resposta.lat);
+    //                 $("#long").val(resposta.lon);
+    //                 //Vamos incluir para que o Número seja focado automaticamente
+    //                 //melhorando a experiência do usuário
+    //                 if (resposta.logradouro != null && resposta.logradouro != ""){
+    //                     $("#numero").focus();
+    //                 }
+    //                 else{
+    //                     $("#endereco").focus();
+    //                 }
+
+    //             },
+    //             error: function(resposta){
+    //                 //Agora basta definir os valores que você deseja preencher
+    //                 //automaticamente nos campos acima.
+    //                 alert("Erro, CEP inválido");
+    //                 $("#endereco").val('');
+    //                 $("#complemento").val('');
+    //                 $("#bairro").val('');
+    //                 $("#cidade").val('');
+    //                 $("#uf").val('');
+    //                 $("#lat").val('');
+    //                 $("#long").val('');
+    //                 //Vamos incluir para que o Número seja focado automaticamente
+    //                 //melhorando a experiência do usuário
+    //                 $("#cep").focus();
+    //             },
+    //         });
+    //     }
+    // });
+    //     var endereco = $(this).val();
+    //     var cidade = $(this).val();
+    //     var numero = $(this).val();
+
+    // $.ajax({
+    //     url: 'https://nominatim.openstreetmap.org/?addressdetails=1&q=${cidade}&q=${endereco},${numero}&format=json&limit=1',
+    //     dataType: 'json',
+    //     success: function(response){
+    //         console.log(response);
+    //     }
+    // });
+
+
+
+
+    //apresentação do mapa (OpenStreetMap)
     var map = L.map('map').setView([-20.46818922, -54.61853027], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-
+    //função para apresentar a geolocalização no mapa
     function apresentar(){
 
         lati = $('#lat').val();
@@ -307,49 +385,8 @@
         }
 
         var marker = L.marker([lati, long]).addTo(map)
-            .bindPopup('Geolocalização do CEP')
+            .bindPopup('Geolocalização aproximada do CEP')
             .openPopup();
     }
-
-    // function apresentar2(){
-
-    //     lati = document.querySelector("#lat");
-    //     long = document.querySelector("#long");
-
-    //     var marker = L.marker([lati, long]).addTo(map)
-    //         .bindPopup('Geolocalização do CEP')
-    //         .openPopup();
-    // }
-
-
-
-    $(document).ready(function() {
-        $('#datatable-responsive').dataTable({
-            "order": [[ 0, "asc" ]],
-            "columnDefs": [
-                {
-                    "targets": [ 0 ],
-                    "searchable": false,
-                    "visible": false
-                }
-            ],
-            "oLanguage": {
-                "sLengthMenu": "Mostrar _MENU_ registros por página",
-                "sZeroRecords": "Nenhum registro encontrado",
-                "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
-                "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
-                "sInfoFiltered": "(filtrado de _MAX_ registros)",
-                "sSearch": "Pesquisar: ",
-                "oPaginate": {
-                    "sFirst": "Início",
-                    "sPrevious": "Anterior",
-                    "sNext": "Próximo",
-                    "sLast": "Último"
-                }
-            },
-        });
-    });
-
-
 </script>
 @endsection

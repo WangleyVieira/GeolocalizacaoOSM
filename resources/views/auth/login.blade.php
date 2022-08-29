@@ -55,6 +55,12 @@
                                                 <label for="password">Senha</label>
                                                 <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Digite sua senha">
                                             </div>
+                                            <div class="mb-3">
+												<small  style="float: right">
+                                                    <a href="{{ route('registar_usuario') }}">Registrar-se</a>
+                                                </small>
+											</div>
+                                            <br>
                                             <div class="mt-3">
                                                 <button type="submit" class="btn btn-lg btn-primary" style="width: 100%; margin-bottom: 0.7rem">Entrar</button>
                                             </div>
