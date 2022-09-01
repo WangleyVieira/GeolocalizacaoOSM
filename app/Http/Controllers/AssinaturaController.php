@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Anexo;
 use App\Assinatura;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,9 @@ class AssinaturaController extends Controller
     public function index()
     {
         try {
-            return view('assinatura.index');
+            $anexos = Anexo::where('ativo', '=', 1)->get();
+
+            return view('assinatura.index', compact('anexos'));
 
         } catch (\Exception $ex) {
             return $ex->getMessage();
@@ -40,7 +43,11 @@ class AssinaturaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+        } catch (\Exception $ex) {
+            return $ex->getMessage();
+        }
     }
 
     /**

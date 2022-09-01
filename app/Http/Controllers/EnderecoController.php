@@ -79,12 +79,10 @@ class EnderecoController extends Controller
             // $endereco->id_user = auth()->user()->id;
             $endereco->cadastradoPorUsuario = auth()->user()->id;
             $endereco->ativo = 1;
-
-            // dd($endereco);
-
             $endereco->save();
 
             return redirect()->back()->with('success', 'Dados de endereço salvo com sucesso');
+
         } catch (\Exception $ex) {
             return redirect()->back()->with('erro', 'Entre em contato com administrador do sistema.');
             // return $ex->getMessage();

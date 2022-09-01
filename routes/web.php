@@ -34,7 +34,12 @@ Route::group(['prefix' => '/assinatura', 'as' => 'assinatura.', 'middleware' => 
     Route::get('/', 'AssinaturaController@index')->name('index');
 });
 
-
+//Anexo
+Route::group(['prefix' => '/anexos', 'as' => 'anexos.', 'middleware' => 'auth'], function(){
+    Route::post('/store', 'AnexoController@store')->name('store');
+    Route::get('/getFile/{id}', 'AnexoController@getFile')->name('getFile');
+    Route::get('/assinatura-doc/{id}', 'AnexoController@carimbo')->name('assinatura_doc');
+});
 
 //Endereco
 Route::group(['prefix' => '/endereco', 'as' => 'endereco.', 'middleware' => 'auth'], function(){

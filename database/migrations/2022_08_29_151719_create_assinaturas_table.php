@@ -14,7 +14,7 @@ class CreateAssinaturasTable extends Migration
     public function up()
     {
         Schema::create('assinaturas', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->timestamps();
         });
     }
