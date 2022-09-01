@@ -42,7 +42,7 @@
                         <th scope="col">Descricao</th>
                         <th scope="col">Documento</th>
                         <th scope="col">Cadastrado por</th>
-                        <th scope="col">Solicitar Assinatura</th>
+                        {{-- <th scope="col">Solicitar Assinatura</th> --}}
                         <th scope="col">Data de cadastro</th>
                         <th scope="col">Data de atualização</th>
                     </tr>
@@ -56,9 +56,9 @@
                                 <a href="{{route('anexos.getFile', $anexo->id)}}" class="link">{{ $anexo->nome_original }}</a>
                             </td>
                             <td>{{ $anexo->cad_usuario->name }}</td>
-                            <td>
-                                <a href="{{ route('anexos.assinatura_doc', $anexo->id) }}" class="btn btn-primary"><i class="align-middle me-2 fas fa-fw fa-check"></i></a>
-                            </td>
+                            {{-- <td>
+                                <a href="" class="btn btn-primary"><i class="align-middle me-2 fas fa-fw fa-check"></i></a>
+                            </td> --}}
                             <td>{{ $anexo->created_at->format('d/m/Y H:i:s') }}</td>
                             <td>{{ $anexo->updated_at->format('d/m/Y H:i:s') }}</td>
                         </tr>
