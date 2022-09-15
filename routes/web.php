@@ -28,14 +28,9 @@ Route::get('/home', ['middleware' => 'auth', 'uses' => 'HomeController@index'])-
 Route::get('/registrar', 'UserController@index')->name('registar_usuario');
 Route::post('/store', 'UserController@store')->name('registrar_store');
 
-
-//Assinatura Docs
-Route::group(['prefix' => '/assinatura', 'as' => 'assinatura.', 'middleware' => 'auth'], function(){
-    Route::get('/', 'AssinaturaController@index')->name('index');
-});
-
 //Anexo
 Route::group(['prefix' => '/anexos', 'as' => 'anexos.', 'middleware' => 'auth'], function(){
+    Route::get('/', 'AnexoController@index')->name('index');
     Route::post('/store', 'AnexoController@store')->name('store');
     Route::get('/getFile/{id}', 'AnexoController@getFile')->name('getFile');
 });

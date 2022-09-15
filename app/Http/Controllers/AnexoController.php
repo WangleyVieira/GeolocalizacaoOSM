@@ -18,7 +18,13 @@ class AnexoController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $anexos = Anexo::where('ativo', '=', 1)->get();
+
+            return view('anexo.index', compact('anexos'));
+        } catch (\Exception $ex) {
+            return $ex->getMessage();
+        }
     }
 
     /**

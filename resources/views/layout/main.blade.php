@@ -72,10 +72,10 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ Route::current()->uri == 'assinatura' ? 'active' : null }}">
-                    <a href="{{ route('assinatura.index') }}" class="sidebar-link">
+                <li class="sidebar-item {{ Route::current()->uri == 'anexos' ? 'active' : null }}">
+                    <a href="{{ route('anexos.index') }}" class="sidebar-link">
                         <i class="fas fa-file"></i>
-                        Assinatura
+                        Anexos
                     </a>
                 </li>
             </ul>
