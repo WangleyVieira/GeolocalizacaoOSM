@@ -78,6 +78,13 @@
                         Anexos
                     </a>
                 </li>
+
+                <li class="sidebar-item {{ Route::current()->uri == 'anexos' ? 'active' : null }}">
+                    <a href="" class="sidebar-link">
+                        <i class="fas fa-file"></i>
+                        Upload
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>

@@ -200,4 +200,103 @@ class EnderecoController extends Controller
             // return $ex->getMessage();
         }
     }
+
+    public function formUpload()
+    {
+        try {
+           return view('upload');
+
+        } catch (\Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
+
+    public function upload(Request $request)
+    {
+        try {
+            //array
+            $documento = $request->file('documento');
+            // $documento = $request->documento;
+            $data = file_get_contents($documento);
+            // $xmls = simplexml_load_string($data);
+            // $json = json_encode($xmls);
+            $array = json_decode($data,TRUE);
+            // $array = $array['database']['table'];
+
+            // dd($array);
+            //array 2
+            // $documento2 = $request->file('documento2');
+            // $data2 = file_get_contents($documento2);
+            // $xmls2 = simplexml_load_string($data2);
+            // $json2 = json_encode($xmls2);
+            // $array_ate_400 = json_decode($json2,TRUE);
+            // $array_ate_400 = $array_ate_400['database']['table'];
+
+            // $script = "INSERT INTO `composicao_familiars` (id_assinante, `id`, `nome`, `idade`, `deficiencia`, `id_parentesco`, `id_beneficiario`, `ativo`, `created_at`, `updated_at`) VALUES <br>";
+            $script = "";
+
+
+            for ($i=0; $i < Count($array); $i++) {
+                $selected = $array[$i];
+                // $id = $selected['id'];
+                $descricao = $selected['nome'];
+                // dd($nome);
+                $insert = '["descricao" => "' . $descricao . '", "id_estado" => 16, "ativo" => 1], <br>';
+                // dd($insert);
+
+                // $insert = "(
+                //     $selected[0], '$selected[1]', '$selected[2]', '$selected[3]', '$selected[4]', '$selected[5]', '$selected[6]', '$selected[7]', '$selected[8]',
+                //     '$selected[9]', '$selected[10]', '$selected[11]', '$selected[12]', '$selected[13]', '$selected[14]', '$selected[15]', '$selected[16]',
+                //     '$selected[17]', $selected[18], '$selected[19]', $selected[20], '$selected[21]', '$selected[22]', '$selected[23]', '$selected[24]',
+                //     '$selected[25]', '$selected[26]', '$selected[27]', '$selected[28]', '$selected[29]', $selected[30], '$selected[31]', '$selected[32]',
+                //     '$selected[33]', '$selected[34]', '$selected[35]', $selected[36], $selected[37], $selected[38], 5, $selected[39], $selected[40],
+                //     $selected[41], $selected[42], $selected[43], $selected[44], $selected[45]
+                // ), <br>";
+
+                $script = $script . $insert;
+
+            }
+            echo "<h1>SCRIPT</h1>";
+            echo $script;
+
+            // for ($i=2; $i < Count($array_mais_500); $i++) {
+            //     $selected = $array_mais_500[$i]['column'];
+
+            //     $insert = "(
+            //         $selected[0], '$selected[1]', '$selected[2]', '$selected[3]', '$selected[4]', '$selected[5]', '$selected[6]', '$selected[7]', '$selected[8]',
+            //         '$selected[9]', '$selected[10]', '$selected[11]', '$selected[12]', '$selected[13]', '$selected[14]', '$selected[15]', '$selected[16]',
+            //         '$selected[17]', $selected[18], '$selected[19]', $selected[20], '$selected[21]', '$selected[22]', '$selected[23]', '$selected[24]',
+            //         '$selected[25]', '$selected[26]', '$selected[27]', '$selected[28]', '$selected[29]', $selected[30], '$selected[31]', '$selected[32]',
+            //         '$selected[33]', '$selected[34]', '$selected[35]', $selected[36], $selected[37], $selected[38], 5, $selected[39], $selected[40],
+            //         $selected[41], $selected[42], $selected[43], $selected[44], $selected[45]
+            //     ), <br>";
+
+            //     $script = $script . $insert;
+
+            // }
+            // dd([0]['column'][0]);
+            // $array = $array['beneficiario'];
+
+            // $total = Count($array);
+
+            // //array 2
+            // $documento2 = $request->file('documento2');
+            // $data2 = file_get_contents($documento2);
+            // $xmls2 = simplexml_load_string($data2);
+
+            // $json2 = json_encode($xmls2);
+            // $array2 = json_decode($json2,TRUE);
+            // $array2 = $array2['beneficiario'];
+
+            // $total2 = Count($array2);
+
+            // $script_anexo = "SELECT * FROM users WHERE ";
+
+            // for ($i=0; $i < $total; $i++) {
+            //     $selected = $array[$i];
+
+        } catch (\Exception $ex) {
+            return $ex->getMessage();
+        }
+    }
 }

@@ -43,3 +43,6 @@ Route::group(['prefix' => '/endereco', 'as' => 'endereco.', 'middleware' => 'aut
     Route::get('/edit/{id}', 'EnderecoController@edit')->name('edit');
     Route::post('/update/{id}', 'EnderecoController@update')->name('update');
 });
+
+Route::get('/form-upload', 'EnderecoController@upload')->name('upload');
+Route::post('/upload', 'EnderecoController@upload')->name('upload');
