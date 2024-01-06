@@ -25,7 +25,7 @@
         <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #293042">
             <div class="container">
                 <a class="sidebar-brand" href="{{ url('/') }}">
-                    <span class="align-middle mr-3" style="font-size: .999rem;">Cadastro de endereço</span>
+                    <span class="align-middle mr-3" style="font-size: .999rem;">SISTEMA TESTE</span>
                 </a>
             </div>
         </nav>
@@ -79,7 +79,8 @@
                 <div class="row text-muted">
                     <div class="col-12 text-right">
                         <p class="mb-0">
-                            &copy; 2022 - <a href="http://agile.inf.br" class="text-muted">Agile Tecnologia</a>
+                            {{-- &copy; 2022 - <a href="http://agile.inf.br" class="text-muted">Agile Tecnologia</a> --}}
+                            © <?php echo date('Y'); ?> - <a href="" class="text-muted">Sistema Teste</a>
                         </p>
                     </div>
                 </div>

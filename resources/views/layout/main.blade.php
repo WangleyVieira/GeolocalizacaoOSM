@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
-    <title>Cadastro de endereço</title>
+    <title>SISTEMA TESTE</title>
     <link rel="shortcut icon" type="svg" href="{{ asset('image/layer-group-solid.svg') }}" style="color: #4a88eb">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
@@ -50,7 +50,7 @@
         <div class="sidebar-content js-simplebar">
             <a class="sidebar-brand" href="">
                 <i class="fas fa-layer-group pt-2"></i>
-                <span class="align-middle mr-3" style="font-size: .999rem;">Cadastro de Endereços</span>
+                <span class="align-middle mr-3" style="font-size: .999rem;">SISTEMA TESTE</span>
             </a>
 
             <ul class="sidebar-nav">
@@ -79,12 +79,12 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ Route::current()->uri == 'anexos' ? 'active' : null }}">
+                {{-- <li class="sidebar-item {{ Route::current()->uri == 'anexos' ? 'active' : null }}">
                     <a href="" class="sidebar-link">
                         <i class="fas fa-file"></i>
                         Upload
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </nav>
@@ -150,7 +150,8 @@
                     </div>
                     <div class="col-6 text-right">
                         <p class="mb-0">
-                            &copy; 2022 - <a href="" class="text-muted">Cadastro de endereços</a>
+                            {{-- &copy; 2022 - <a href="" class="text-muted">Cadastro de endereços</a> --}}
+                            © <?php echo date('Y'); ?> - <a href="" class="text-muted">Sistema Teste</a>
                         </p>
                     </div>
                 </div>

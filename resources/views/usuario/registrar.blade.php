@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>STIECSA</title>
+    <title>SISTEMA TESTE</title>
     <link rel="shortcut icon" type="svg" href="{{ asset('image/layer-group-solid.svg') }}" style="color: #4a88eb">
     <link rel="shortcut icon" type="svg" href="{{ asset('image/layer-group-solid.svg') }}" style="color: #4a88eb">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&amp;display=swap" rel="stylesheet">
@@ -50,42 +50,40 @@
                                             @csrf
                                             @method('POST')
                                             @include('errors.alerts')
-                                            @include('errors.errors')
+                                            {{-- @include('errors.errors') --}}
                                             <div class="m-sm-4">
                                                 <div class="mb-3">
                                                     <label class="form-label">Nome</label>
-                                                    <input class="form-control form-control-lg" type="text" name="name" id="name" placeholder="Informe seu nome">
+                                                    <input class="form-control form-control-lg @error('name') is-invalid @enderror" type="text" name="name" id="name" placeholder="Informe seu nome">
+                                                    @error('name')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                                 {{-- <div class="mb-3">
                                                     <label class="form-label">CPF</label>
-                                                    <input class="form-control form-control-lg" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF">
+                                                    <input class="form-control form-control-lg @error('title') is-invalid @enderror" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF">
                                                 </div> --}}
                                                 <div class="mb-3">
                                                     <label class="form-label">Email</label>
-                                                    <input class="form-control form-control-lg" type="email" name="email" placeholder="Informe um email válido">
+                                                    <input class="form-control form-control-lg @error('email') is-invalid @enderror" type="email" name="email" placeholder="Informe um email válido">
+                                                    @error('email')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
-                                                {{-- <div class="mb-3">
-                                                    <label for="uf">UF</label>
-                                                    <select name="uf" id="uf" class="form-control select2" required>
-                                                        <option value="" selected disabled>Selecione UF</option>
-                                                        @foreach ($estados as $estado)
-                                                            <option value="{{ $estado->id }}">{{ $estado->sigla }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="id_municipio">Município</label>
-                                                        <select name="id_municipio" id="id_municipio" class="form-control select2" required>
-                                                            <option value="" selected disabled>Selecione município</option>
-                                                        </select>
-                                                </div> --}}
+
                                                 <div class="mb-3">
                                                     <label class="form-label">Senha (mínimo 6 caracteres)</label>
-                                                    <input class="form-control form-control-lg" type="password" name="password" placeholder="Informe uma senha">
+                                                    <input class="form-control form-control-lg @error('password') is-invalid @enderror" type="password" name="password" placeholder="Informe uma senha">
+                                                    @error('password')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Confirme a senha (mínimo 6 caracteres)</label>
-                                                    <input class="form-control form-control-lg" type="password" name="confirmacao" placeholder="Confirme a senha">
+                                                    <input class="form-control form-control-lg @error('confirmacao') is-invalid @enderror" type="password" name="confirmacao" placeholder="Confirme a senha">
+                                                    @error('confirmacao')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <button type="submit" class="btn btn-lg btn-primary" style="width: 100%">Cadastrar</button>
@@ -106,7 +104,8 @@
                 <div class="row text-muted">
                     <div class="col-12 text-right">
                         <p class="mb-0">
-                            &copy; 2022 - <a href="http://agile.inf.br" class="text-muted">Agile Tecnologia</a>
+                            {{-- &copy; 2022 - <a href="http://agile.inf.br" class="text-muted">Agile Tecnologia</a> --}}
+                            © <?php echo date('Y'); ?> - <a href="" class="text-muted">Sistema Teste</a>
                         </p>
                     </div>
                 </div>
@@ -124,48 +123,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.js"></script>
 <script src="{{asset('select2-4.1.0/dist/js/select2.min.js')}}"></script>
 @yield('scripts')
-<script>
-    // $('#cpf').mask('000.000.000-00');
 
-    $("#form").validate({
-        rules : {
-            name:{
-                required:true,
-                maxlength:255,
-            },
-            email:{
-                required:true,
-                maxlength:255,
-            },
-            password:{
-                required:true,
-                minlength:6,
-            },
-            confirmacao:{
-                required:true,
-                minlength:6,
-            },
-        },
-        messages:{
-            name:{
-                required:"Campo obrigatório",
-                maxlength:"Máximo de 255 caracteres"
-            },
-            email:{
-                required:"Campo obrigatório",
-                maxlength:"Máximo de 255 caracteres"
-            },
-            password:{
-                required:"Campo obrigatório",
-                minlength:"Minímo 6 caracteres"
-            },
-            confirmacao:{
-                required:"Campo obrigatório",
-                minlength:"Minímo 6 caracteres"
-            },
-        }
-    });
-</script>
 </body>
 </html>
 

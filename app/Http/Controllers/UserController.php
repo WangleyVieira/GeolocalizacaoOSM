@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
 use App\User;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
@@ -15,75 +16,31 @@ class UserController extends Controller
         try {
             return view('usuario.registrar');
 
-        } catch (\Exception $ex) {
-            return $ex->getMessage();
+        }
+        catch (\Exception $ex) {
+            // return $ex->getMessage();
+            return redirect()->back()->with('erro', 'Erro, contacte o administrador do sistema.');
         }
     }
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
         try {
-            //validação dos campos
-            $input = [
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => $request->password,
-            ];
-
-            //regras
-            $regras = [
-                'name' => 'required|max:255',
-                'email' => 'required|max:255',
-                'password' => 'required|min:6',
-            ];
-
-            //mensagens de erro
-            $mensagens = [
-                'name.required' => 'O nome é obrigatório.',
-                'name.max' => 'Máximo de 255 caracteres.',
-
-                'email.required' => 'O email é obrigatório.',
-                'email.max' => 'Máximo de 255 caracteres',
-
-                'password.required' => 'A senha é obrigatório.',
-                'password.min' => 'A senha é no minímo 6 caracteres.',
-            ];
-
-            $validacao = Validator::make($input, $regras, $mensagens);
-            $validacao->validate();
-
-            //verifica se existe um email cadastrado
-            $user = User::where('email', '=', $request->email)
-                    ->select('id', 'email')
-                    ->first();
-            if($user){
-                return redirect()->back()->with('erro', 'Existe um e-mail cadastrado ao informado.');
-            }
 
             if($request->password != null){
                 // as senhas estão ok?
                 if($request->password != $request->confirmacao){
-                    return redirect()->back()->with('erro', 'Senha não conferem.');
+                    return redirect()->back()->with('erro', 'Senhas não conferem.');
                 }
-
-                $tamanho_senha = strlen($request->password);
-                if($tamanho_senha < 6){
-                    return redirect()->back()->with('erro', 'Necessário senha de no minímo 6 caracteres.');
-                }
-
             }
 
-            $novoUsuario = new User();
-            $novoUsuario->name = $request->name;
-            $novoUsuario->email = $request->email;
-            $novoUsuario->password = Hash::make($request->password);
-            $novoUsuario->ativo = 1;
-            $novoUsuario->save();
+            User::create($request->validated());
 
             return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso.');
 
         } catch (\Exception $ex) {
             return $ex->getMessage();
+            // return redirect()->back()->with('erro', 'Erro ao realizar o cadastro.');
         }
     }
 }
