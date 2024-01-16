@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Endereco extends Model
+class PontoGeografico extends Model
 {
-    protected $fillable = ['cep' ,'endereco', 'cidade', 'uf', 'numero', 'bairro', 'complemento', 'ponto_referencia', 'id_user', 'cadastradoPorUsuario', 'alteradoPorUsuario', 'inativadoPorUsuario', 'motivoInativado', 'dataInativado','ativo'];
+    protected $fillable = ['latitude' ,'longitude', 'id_endereco', 'id_user', 'cadastradoPorUsuario', 'alteradoPorUsuario', 'inativadoPorUsuario', 'motivoInativado', 'dataInativado','ativo'];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
 
@@ -27,8 +27,8 @@ class Endereco extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
-    public function setCepAttribute($value)
+    public function endereco()
     {
-        $this->attributes['cep'] = preg_replace('/[^0-9]/', '', $value);
+        return $this->belongsTo(Endereco::class, 'id_endereco');
     }
 }

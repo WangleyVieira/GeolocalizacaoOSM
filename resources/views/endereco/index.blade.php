@@ -4,7 +4,7 @@
 
 
 @include('errors.alerts')
-@include('errors.errors')
+{{-- @include('errors.errors') --}}
 
 <div class="col-12">
 
@@ -13,81 +13,67 @@
         @method('POST')
         <div class="card">
             <div class="card-body">
-
-            <h5>Dados Pessoais</h5>
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label class="form-label">Nome</label>
-                    <input class="form-control form-control-lg" type="text" name="nome" id="nome" placeholder="Informe seu nome" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="form-label">CPF</label>
-                    <input class="cpf form-control form-control-lg" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="form-label">Email</label>
-                    <input class="form-control form-control-lg" type="email" name="email" placeholder="Informe um email válido" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="telefone_contato1">Telefone (Celular)</label>
-                    <input type="text" name="telefone_contato1" id="telefone_contato1" value="" class="form-control form-control-lg">
-                </div>
-            </div>
-            <br>
-            <hr>
-            <br>
             <h5>Dados de endereço</h5>
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label for="cep">CEP</label>
-                            <input type="text" name="cep" id="cep" class="form-control form-control-lg" placeholder="Informe o CEP" required>
+                            <input type="text" name="cep" id="cep" class="form-control form-control-lg @error('cep') is-invalid @enderror" placeholder="Informe o CEP">
+                            @error('cep')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="endereco">Endereço (Rua/Avenida)</label>
-                            <input type="text" name="endereco" id="endereco" class="form-control form-control-lg" placeholder="Informe o endereço" required>
+                            <input type="text" name="endereco" id="endereco" class="form-control form-control-lg @error('endereco') is-invalid @enderror" placeholder="Informe o endereço">
+                            @error('endereco')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="cidade">Cidade</label>
-                            <input type="text" name="cidade" id="cidade" class="form-control form-control-lg" placeholder="Informe a cidade" required>
+                            <input type="text" name="cidade" id="cidade" class="form-control form-control-lg @error('cidade') is-invalid @enderror" placeholder="Informe a cidade">
+                            @error('cidade')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="numero">Número</label>
-                            <input type="text" name="numero" id="numero" class="form-control form-control-lg" placeholder="Informe o número" required>
+                            <input type="text" name="numero" id="numero" class="form-control form-control-lg @error('numero') is-invalid @enderror" placeholder="Informe o número">
+                            @error('numero')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="bairro">Bairro</label>
-                            <input type="text" name="bairro" id="bairro" class="form-control form-control-lg" placeholder="Informe o bairro" required>
+                            <input type="text" name="bairro" id="bairro" class="form-control form-control-lg @error('bairro') is-invalid @enderror" placeholder="Informe o bairro">
+                            @error('bairro')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="uf">UF</label>
-                            <input type="text" name="uf" id="uf" class="form-control form-control-lg" placeholder="Informe a UF" required>
+                            <input type="text" name="uf" id="uf" class="form-control form-control-lg @error('uf') is-invalid @enderror" placeholder="Informe a UF">
+                            @error('uf')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="complemento">Complemento</label>
                             <input type="text" name="complemento" id="complemento" class="form-control form-control-lg" placeholder="Informe o complemento">
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="ponto_referencia">Ponto de Referência</label>
-                            <input type="text" name="ponto_referencia" class="form-control form-control-lg" placeholder="Informe o ponto de referência">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="lat">Latitude (graus decimais)</label>
-                            <input type="text" name="lat" id="lat" class="form-control form-control-lg">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="long">Longitude (graus decimais)</label>
-                            <input type="text" name="long" id="long" class="form-control form-control-lg">
+                            <label for="pontoReferencia">Ponto de Referência</label>
+                            <input type="text" name="pontoReferencia" class="form-control form-control-lg" placeholder="Informe o ponto de referência">
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="map"></div>
-
-            {{-- </div> --}}
         </div>
+
         <div class="col-md-12">
             <a onclick="apresentar()" class="btn btn-secondary m-1">Apresentar no mapa</a>
             <button type="submit" class="btn btn-primary m-1">Cadastrar</button>
@@ -111,10 +97,6 @@
                             <thead>
                                 <tr>
                                     <th scope="col">id</th>
-                                    <th scope="col">Nome</th>
-                                    <th scope="col">CPF</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Contato</th>
                                     <th scope="col">CEP</th>
                                     <th scope="col">Endereço</th>
                                     <th scope="col">Cidade</th>
@@ -123,7 +105,6 @@
                                     <th scope="col">Bairro</th>
                                     <th scope="col">Complemento</th>
                                     <th scope="col">Ponto de referência</th>
-                                    <th scope="col">Geolocalização</th>
                                     <th scope="col">Cadastrado Por</th>
                                     <th scope="col">Ver mapa</th>
                                     <th scope="col">Alterar</th>
@@ -134,10 +115,6 @@
                                 @foreach ($enderecos as $end)
                                 <tr>
                                     <td>{{ $end->id }}</td>
-                                    <td>{{ $end->nome }}</td>
-                                    <td>{{ $end->cpf }}</td>
-                                    <td>{{ $end->email }}</td>
-                                    <td>{{ $end->telefone }}</td>
                                     <td>{{ $end->cep != null ? $end->cep : 'não informado' }}</td>
                                     <td>{{ $end->endereco != null ? $end->endereco : 'não informado' }}</td>
                                     <td>{{ $end->cidade != null ? $end->cidade : 'não informado' }}</td>
@@ -146,10 +123,6 @@
                                     <td>{{ $end->bairro != null ? $end->bairro : 'não informado' }}</td>
                                     <td>{{ $end->complemento != null ? $end->complemento : 'não informado' }}</td>
                                     <td>{{ $end->ponto_referencia != null ? $end->ponto_referencia : 'não informado' }}</td>
-                                    <td>
-                                        Latitude: {{ $end->lat != null ? $end->lat : 'não informado' }}<br>
-                                        Longitude: {{ $end->long != null ? $end->long : 'não informado' }}
-                                    </td>
                                     <td>{{ isset($end->cadastradoPorUsuario) ? $end->user->name : 'nativo do sistema' }}</td>
                                     <td>
                                         <a onclick="apresentar2({{ $end->id }})" class="btn btn-secondary m-1"><i class="align-middle me-2 fas fa-fw fa-map-marked"></i></a>

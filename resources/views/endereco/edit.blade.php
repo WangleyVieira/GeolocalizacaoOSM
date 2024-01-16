@@ -20,29 +20,6 @@
         @method('POST')
         <div class="card">
             <div class="card-body">
-
-            <h5>Dados Pessoais</h5>
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label class="form-label">Nome</label>
-                    <input class="form-control form-control-lg" type="text" name="nome" id="nome" value="{{ $end->nome }}" placeholder="Informe seu nome" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="form-label">CPF</label>
-                    <input class="cpf form-control form-control-lg" type="text" name="cpf" id="cpf" value="{{ $end->cpf }}" placeholder="Informe seu CPF" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="form-label">Email</label>
-                    <input class="form-control form-control-lg" type="email" name="email" value="{{ $end->email }}" placeholder="Informe um email válido" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="telefone_contato1">Telefone (Celular)</label>
-                    <input type="text" name="telefone_contato1" id="telefone_contato1" value="{{ $end->telefone }}"class="form-control form-control-lg">
-                </div>
-            </div>
-            <br>
-            <hr>
-            <br>
             <h5>Dados de endereço</h5>
             <div class="row">
                 <div class="col-md-12">

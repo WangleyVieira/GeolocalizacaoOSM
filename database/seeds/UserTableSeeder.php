@@ -1,8 +1,10 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Ramsey\Uuid\Uuid;
 
 class UserTableSeeder extends Seeder
 {
@@ -13,13 +15,16 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
+        $uuid1 = Uuid::uuid4();
+
         DB::table('users')->insert([
-            'name' => 'Agile',
+            'id' => $uuid1,
+            'name' => 'Teste',
             'email' => 'suporte@teste.com.br',
             'password' => Hash::make('teste@'),
             'ativo' => 1,
-            'created_at' => '2022-08-16 23:47:10',
-            'updated_at' => '2022-08-16 23:47:10'
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
     }
 }

@@ -49,11 +49,13 @@
                                             @include('errors.errors')
                                             <div class="mb-3">
                                                 <label for="email">Email</label>
-                                                <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Digite seu email">
+                                                <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Digite seu email" value="{{ old('email') }}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="password">Senha</label>
-                                                <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Digite sua senha">
+                                                <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Digite sua senha"><br>
+                                                <input type="checkbox" id="showPassword" onclick="togglePasswordVisibility()">
+                                                <label for="showPassword">Mostrar Senha</label>
                                             </div>
                                             <div class="mb-3">
 												<small  style="float: right">
@@ -93,7 +95,16 @@
 <script src="{{ url('js/bootstrap.js') }}"></script>
 <script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
 <script>
-    $('#cpf').mask('000.000.000-00');
+    function togglePasswordVisibility() {
+      var passwordInput = document.getElementById('password');
+      var showPasswordCheckbox = document.getElementById('showPassword');
+
+      if (showPasswordCheckbox.checked) {
+        passwordInput.type = 'text';
+      } else {
+        passwordInput.type = 'password';
+      }
+    }
 </script>
 
 </body>

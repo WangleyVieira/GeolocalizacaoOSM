@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Endereco;
+use App\Http\Requests\EnderecoStoreRequest;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EnderecoController extends Controller
 {
@@ -17,11 +19,13 @@ class EnderecoController extends Controller
     public function index()
     {
         try {
-            $enderecos = Endereco::where('ativo', '=', 1)->get();
-            $users = User::where('ativo', '=', 1)->get();
+            $enderecos = Endereco::where('ativo', '=', Endereco::ATIVO)->get();
+            $users = User::where('ativo', '=', User::ATIVO)->get();
 
             return view('endereco.index', compact('enderecos', 'users'));
-        } catch (\Exception $ex) {
+
+        }
+        catch (\Exception $ex) {
             // return $ex->getMessage();
             return redirect()->back()->with('erro', 'Entre em contato com administrador do sistema.');
         }
@@ -43,49 +47,22 @@ class EnderecoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EnderecoStoreRequest $request)
     {
         try {
-            if($request->cep == null || $request->endereco == null || $request->numero == null){
-                return redirect()->back()->with('erro', 'Campos CEP, endereço e número, são obrigatórios.');
-            }
 
-            //verifica se já existe email cadastrado
-            $verifica_email = Endereco::where('email', '=', $request->email)
-                ->select('id', 'nome', 'email')
-                ->first();
-
-            if($verifica_email){
-                return redirect()->back()->with('erro', 'Já existe um email cadastrado.');
-            }
-
-            $endereco = new Endereco();
-            //dados da pessoa
-            $endereco->nome = $request->nome;
-            $endereco->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
-            $endereco->email = $request->email;
-            $endereco->telefone = preg_replace('/[^0-9]/', '', $request->telefone_contato1);
-            //dados de endereço
-            $endereco->cep = preg_replace('/[^0-9]/', '', $request->cep);
-            $endereco->cidade = $request->cidade;
-            $endereco->endereco = $request->endereco;
-            $endereco->uf = $request->uf;
-            $endereco->numero = $request->numero;
-            $endereco->bairro = $request->bairro;
-            $endereco->complemento = $request->complemento;
-            $endereco->ponto_referencia = $request->ponto_referencia;
-            $endereco->lat = $request->lat;
-            $endereco->long = $request->long;
-            // $endereco->id_user = auth()->user()->id;
-            $endereco->cadastradoPorUsuario = auth()->user()->id;
-            $endereco->ativo = 1;
-            $endereco->save();
+            Endereco::create($request->validated() + [
+                'complemento' => $request->complemento,
+                'pontoReferencia' => $request->pontoReferencia,
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
             return redirect()->back()->with('success', 'Dados de endereço salvo com sucesso');
 
-        } catch (\Exception $ex) {
-            return redirect()->back()->with('erro', 'Entre em contato com administrador do sistema.');
+        }
+        catch (\Exception $ex) {
             // return $ex->getMessage();
+            return redirect()->back()->with('erro', 'Entre em contato com administrador do sistema.');
         }
     }
 
@@ -109,12 +86,13 @@ class EnderecoController extends Controller
     public function edit(Request $request, $id)
     {
         try {
-            $end = Endereco::find($id);
+            $endereco = Endereco::where('id', '=', $id)->where('ativo', '=', Endereco::ATIVO)->first();
 
-            return view('endereco.edit', compact('end'));
-        } catch (\Exception $ex) {
-            return $ex->getMessage();
-            // return redirect()->back()->with('erro', 'Entre em contato com administrador do sistema.');
+            return view('endereco.edit', compact('endereco'));
+        }
+        catch (\Exception $ex) {
+            // return $ex->getMessage();
+            return redirect()->back()->with('erro', 'Entre em contato com administrador do sistema.');
         }
     }
 
@@ -131,19 +109,6 @@ class EnderecoController extends Controller
             if($request->cep == null || $request->endereco == null || $request->numero == null){
                 return redirect()->back()->with('erro', 'Campos CEP, endereço e número, são obrigatórios.');
             }
-
-             //varifica se já existe um email ativo cadaastrado no BD
-             $verifica_user = Endereco::where('email', '=', $request->email)
-             ->orWhere('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))
-             ->select('id', 'email', 'cpf')
-             ->first();
-
-         //existe um email cadastrado?
-         if($verifica_user){
-             if ($verifica_user->id != $id) {
-                 return redirect()->back()->with('erro', 'Já existe um usuário cadastrado com esse email e/ou CPF.');
-             }
-         }
 
             $endereco =  Endereco::find($id);
             //dados da pessoa

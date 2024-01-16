@@ -15,7 +15,6 @@ class HomeController extends Controller
                 ->select('id', 'name', 'email')
                 ->first();
 
-                // dd($user);
 
             return view('home.home', compact('user'));
 

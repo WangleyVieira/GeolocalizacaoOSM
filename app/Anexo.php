@@ -12,6 +12,9 @@ class Anexo extends Model
 
     protected $table = 'anexos';
 
+    const ATIVO = true;
+    const INATIVO = false;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

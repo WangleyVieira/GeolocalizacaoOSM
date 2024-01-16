@@ -119,7 +119,7 @@
                             </a>
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                 data-toggle="dropdown">
-                                <span class="avatar"> {{ auth()->user()->name }}</span>
+                                <span class="avatar"> {{ Auth::user()->name }}</span>
                                 <span class="text-dark"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
